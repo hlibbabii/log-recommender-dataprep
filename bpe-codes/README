@@ -1,8 +1,9 @@
 Files:
-* <n>_<j>.txt - contains merges for <j>-th <n>-percent chunk of data;
-* pearsons_<n>_<m>.scv - contains matrix of pearson coeffitients computed for all combinations of <n>-percent chunks of data, where element [i,j] is a coefficient for chunks i and j; <m> first merges are taken;
-* cross_occurences_<n>_<m>.txt - contains a list of pairs (<merge> <occurrences>) which shows that merge <merge> is present in <occurences> <n>-percent chunks; only first <m> merges are taken;
+* <n>_<j>.txt - contains BPE merges computed based on <j>-th <n>-percent chunk of the corpus;
+* pearsons_<n>_<m>.scv - contains matrix of pearson coeffitients computed for all combinations of <n>-percent chunks of the corpus, where element [i,j] is a coefficient for chunks i and j; <m> first BPE merges are taken;
+* cross_occurences_<n>_<m>.txt - contains a list of pairs (<merge> <occurrences>) which shows that merge <merge> is present in <occurences> <n>-percent chunks; only first <m> BPE merges are taken;
 * cross_occurences_summary_<n>_<m>.txt contains a list of pairs (<occurences> <merge_percent>) which show that on average between all the <n>-percent chunks, <merge_percent> percent of merges occur in <occurences> lists; only first <m> merges are taken;
 * cooccurence_matrix_<n>_<m>.csv - contains a matrix[i, j] where element [i,j] is the percent of merges that is found both in i-th and j-th <n>-percent chunks ; only first <m> merges are taken;
 * cooccurence_matrix_<n>_<m1>_<m2>.csv - contains a matrix where element [i,j] is the percent of merges that is found both in <m1> first merges of i-th and <m2> first merges of j-th <n>-percent chunks;
 * corpus_size_matrix_<n>_<m>.csv - contains a matrix where element [i,j] is the number of tokens in <i>-th <n>-percent chunk which was preprocessed using bpe merges built on <j>-th chunk devided by the number of tokens in the same chunk preprocessed using bpe merges built on <i>-th chunk; only first <m> merges are taken.
+* merge_difference_matrix_<n>_<m>.csv - contains a matrix where element [i,j] is a fraction of tokens from <i>-th <n>-percent chunk which result in same splitting after using bpe codes computed based on i-th and j-th corpus chunks (except for the last column); last column is a fraction of tokens from <i>-th <n>-percent chunk which result in same splitting after using bpe codes computed based on i-th chunk and after doing case-splitting; only first <m> merges are taken.
