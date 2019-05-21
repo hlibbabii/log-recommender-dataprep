@@ -1,7 +1,5 @@
-import csv
-import os
 from collections import defaultdict, Counter
-from typing import List, Optional, Dict, Tuple
+from typing import List, Tuple
 
 from scipy.stats.stats import pearsonr
 
