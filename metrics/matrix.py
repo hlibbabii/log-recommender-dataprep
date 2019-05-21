@@ -4,7 +4,7 @@ from collections import defaultdict, Counter
 from typing import List, Optional, Dict, Tuple
 from metrics.vector import pearson, cooccurences
 from metrics.merge import Merge
-from sklearn.externals.joblib import Memory
+from joblib import Memory
 
 # needed for caching cell outputs
 memory = Memory(cachedir=os.path.join(os.environ['HOME'], 'jupyter-cache'), verbose=0)
