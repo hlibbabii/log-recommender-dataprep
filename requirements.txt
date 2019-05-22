@@ -1,10 +1,9 @@
 appdirs==1.4.3
 backcall==0.1.0
 coverage==4.5.3
-dataprep==1.0.0a0
 decorator==4.4.0
 docopt==0.6.2
--e git+http://github.com/giganticode/dataprep@eff3124fd4223eb95e5104ad33fb5e4331029b49#egg=giganticode_dataprep
+git+http://github.com/giganticode/dataprep@eff3124fd4223eb95e5104ad33fb5e4331029b49#egg=giganticode_dataprep
 ipykernel==5.1.1
 ipython==7.5.0
 ipython-genutils==0.2.0
