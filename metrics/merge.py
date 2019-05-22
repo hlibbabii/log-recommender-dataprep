@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+
 class Merge(object):
     def __init__(self, pair: Tuple[str, str], freq: int):
         self.pair = pair

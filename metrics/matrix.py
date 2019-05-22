@@ -1,7 +1,6 @@
 import csv
 import os
-from collections import defaultdict, Counter
-from typing import List, Optional, Dict, Tuple
+from typing import List, Optional
 from metrics.vector import pearson, cooccurences
 from metrics.merge import Merge
 from joblib import Memory
@@ -31,6 +30,7 @@ def pearson_matrix(merge_lists: List[List[Merge]], path_to_save: Optional[str] =
     if path_to_save:
         output_matrix_to_csv(res, path_to_save)
     return res
+
 
 @memory.cache
 def cooccurence_matrix(merges_list1: List[List[Merge]], merges_list2: List[List[Merge]], path_to_save: Optional[str] = None):
