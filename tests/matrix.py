@@ -1,44 +1,65 @@
 import unittest
 
-from metrics.matrix import cooccurence_matrix
+from metrics.matrix import cooccurence_matrix, merge_similarity_rate_matrix
 from metrics.merge import Merge
 
 
-def test_cooccurrence_matrix(self):
-    merges1 = [Merge(('a', 'b'), 1), Merge(('c', 'd'), 1), Merge(('e', 'f'), 1)]
-    merges2 = [Merge(('a', 'b'), 1), Merge(('c', 'd'), 1), Merge(('x', 'z'), 1)]
-    merges3 = [Merge(('a', 'b'), 1), Merge(('p', 't'), 1), Merge(('l', 'm'), 1)]
+class CooccurrenceMatrixTest(unittest.TestCase):
+    def test_simple_pass(self):
+        merges1 = [Merge(('a', 'b'), 1), Merge(('c', 'd'), 1), Merge(('e', 'f'), 1)]
+        merges2 = [Merge(('a', 'b'), 1), Merge(('c', 'd'), 1), Merge(('x', 'z'), 1)]
+        merges3 = [Merge(('a', 'b'), 1), Merge(('p', 't'), 1), Merge(('l', 'm'), 1)]
 
-    actual = cooccurence_matrix([merges1, merges2, merges3], [merges1, merges2, merges3])
+        actual = cooccurence_matrix([merges1, merges2, merges3], [merges1, merges2, merges3])
 
-    expected = [
-        [1.0, 0.67, 0.33],
-        [0.67, 1.0, 0.33],
-        [0.33, 0.33, 1.0]
-    ]
+        expected = [
+            [1.0, 0.67, 0.33],
+            [0.67, 1.0, 0.33],
+            [0.33, 0.33, 1.0]
+        ]
 
-    for i in range(3):
-        for j in range(3):
-            self.assertAlmostEqual(expected[i][j], actual[i][j], places=2)
+        for i in range(3):
+            for j in range(3):
+                self.assertAlmostEqual(expected[i][j], actual[i][j], places=2)
+
+    def test_diff_merges_amount(self):
+        merges1 = [Merge(('a', 'b'), 1)]
+        merges2 = [Merge(('e', 'f'), 1)]
+
+        merges1_bigger = [Merge(('a', 'b'), 1), Merge(('c', 'd'), 1)]
+        merges2_bigger = [Merge(('e', 'f'), 1), Merge(('g', 'h'), 1)]
+
+        actual = cooccurence_matrix([merges1, merges2], [merges1_bigger, merges2_bigger])
+
+        expected = [
+            [1.0, 0.0],
+            [0.0, 1.0],
+        ]
+
+        for i in range(2):
+            for j in range(2):
+                self.assertAlmostEqual(expected[i][j], actual[i][j], places=2)
 
 
-def test_cooccurrence_matrix_diff_merges_amount(self):
-    merges1 = [Merge(('a', 'b'), 1)]
-    merges2 = [Merge(('e', 'f'), 1)]
+class MergeSimilarityRateMatrixTest(unittest.TestCase):
+    def test_trivial_pass(self):
+        vocab_list = [{"ab": 10}]
+        merges_list = [{('a', 'b'): 1}]
 
-    merges1_bigger = [Merge(('a', 'b'), 1), Merge(('c', 'd'), 1)]
-    merges2_bigger = [Merge(('e', 'f'), 1), Merge(('g', 'h'), 1)]
+        actual = merge_similarity_rate_matrix(vocab_list, merges_list)
+        expected = [[1.0]]
 
-    actual = cooccurence_matrix([merges1, merges2], [merges1_bigger, merges2_bigger])
+        self.assertEqual(expected, actual)
 
-    expected = [
-        [1.0, 0.0],
-        [0.0, 1.0],
-    ]
+    def test_simple_pass(self):
+        vocab_list = [{"ab": 10, "cd": 30},
+                      {"ef": 70, "gh": 30}]
+        merges_list = [{('g', 'h'): 1}, {('a', 'b'): 1}]
 
-    for i in range(2):
-        for j in range(2):
-            self.assertAlmostEqual(expected[i][j], actual[i][j], places=2)
+        actual = merge_similarity_rate_matrix(vocab_list, merges_list)
+        expected = [[1.0, 0.75], [0.7, 1.0]]
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':

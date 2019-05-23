@@ -1,5 +1,5 @@
 from collections import defaultdict, Counter
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from scipy.stats.stats import pearsonr
 
@@ -26,3 +26,40 @@ def cooccurences(*merges_lists: List[Merge]) -> Counter:
     for merges in merges_lists:
         c.update(list(map(lambda m: m.pair, merges)))
     return c
+
+
+def summarize_cooccurences(cooccurences: Counter) -> Dict[int, float]:
+    total_merges_in_n_chunks = defaultdict(int)
+    for k, n in cooccurences.items():
+        total_merges_in_n_chunks[n] += n
+
+    total_merges = sum(total_merges_in_n_chunks.values())
+
+    fraction_of_merges_in_n_chunks = {}
+    for n, v in total_merges_in_n_chunks.items():
+        fraction_of_merges_in_n_chunks[n] = float(v) / total_merges
+
+    return fraction_of_merges_in_n_chunks
+
+
+def merge_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str, int]]) -> float:
+    if not vocab1:
+        raise ValueError("Lists cannot be empty!")
+    if len(vocab1) != len(vocab2):
+        raise ValueError("Lists must be of the same length")
+
+    total = 0
+    different = 0
+    for (word1, freq1), (word2, freq2) in zip(vocab1, vocab2):
+        if freq1 != freq2:
+            raise ValueError(f"Not matching dict entries: {word1}: {freq1} and {word2}: {freq2}")
+
+        if word1 == word2:
+            total += freq1
+        elif "".join(word1.split(" ")) == "".join(word2.split(" ")):
+            different += freq1
+            total += freq1
+        else:
+            raise ValueError(f"Not matching dict entries: {word1}: {freq1} and {word2}: {freq2}")
+
+    return 1.0 - float(different) / total

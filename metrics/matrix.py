@@ -1,7 +1,10 @@
 import csv
 import os
-from typing import List, Optional
-from metrics.vector import pearson, cooccurences
+from typing import List, Optional, Tuple, Dict
+
+from dataprep.split import bpe_encode
+
+from metrics.vector import pearson, cooccurences, merge_similarity_rate
 from metrics.merge import Merge
 from joblib import Memory
 
@@ -42,6 +45,23 @@ def cooccurence_matrix(merges_list1: List[List[Merge]], merges_list2: List[List[
             merges_total = min(len(merges1), len(merges2))
             n_merges_present_in_both_lists = sum([1 for c in cooccs.values() if c == 2])
             row.append(float(n_merges_present_in_both_lists) / merges_total)
+        res.append(row)
+    if path_to_save:
+        output_matrix_to_csv(res, path_to_save)
+    return res
+
+
+@memory.cache
+def merge_similarity_rate_matrix(vocab_list: List[Dict[str, int]],
+                                 merges_list: List[Dict[Tuple[str, str], int]],
+                                 path_to_save: Optional[str] = None):
+    res = []
+    for idx, vocab in enumerate(vocab_list):
+        row = []
+        own_encoded_vocab = bpe_encode.encode(vocab, merges_list[idx])
+        for merges in merges_list:
+            cross_encoded_vocab = bpe_encode.encode(vocab, merges)
+            row.append(merge_similarity_rate(cross_encoded_vocab.items(), own_encoded_vocab.items()))
         res.append(row)
     if path_to_save:
         output_matrix_to_csv(res, path_to_save)
