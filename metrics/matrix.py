@@ -51,10 +51,18 @@ def cooccurence_matrix(merges_list1: List[List[Merge]], merges_list2: List[List[
     return res
 
 
+def to_dict_merge_format(merge_list: List[Merge]) -> Dict[Tuple[str, str], int]:
+    res = {}
+    for idx, merge in enumerate(merge_list):
+        res[merge.pair] = idx
+    return res
+
+
 @memory.cache
 def merge_similarity_rate_matrix(vocab_list: List[Dict[str, int]],
-                                 merges_list: List[Dict[Tuple[str, str], int]],
+                                 merges_list: List[List[Merge]],
                                  path_to_save: Optional[str] = None):
+    merges_list = list(map(to_dict_merge_format, merges_list))
     res = []
     for idx, vocab in enumerate(vocab_list):
         row = []
