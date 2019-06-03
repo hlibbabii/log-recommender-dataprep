@@ -42,7 +42,8 @@ def summarize_cooccurences(cooccurences: Counter) -> Dict[int, float]:
     return fraction_of_merges_in_n_chunks
 
 
-def merge_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str, int]]) -> float:
+def merge_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str, int]]) \
+        -> Tuple[float, float, float, float, float]:
     if not vocab1:
         raise ValueError("Lists cannot be empty!")
     if len(vocab1) != len(vocab2):
@@ -50,16 +51,35 @@ def merge_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str,
 
     total = 0
     different = 0
+    more_subwords = 0
+    split_now = 0
+    less_subwords = 0
+    unsplit_now = 0
     for (word1, freq1), (word2, freq2) in zip(vocab1, vocab2):
         if freq1 != freq2:
             raise ValueError(f"Not matching dict entries: {word1}: {freq1} and {word2}: {freq2}")
 
         if word1 == word2:
             total += freq1
-        elif "".join(word1.split(" ")) == "".join(word2.split(" ")):
-            different += freq1
-            total += freq1
         else:
-            raise ValueError(f"Not matching dict entries: {word1}: {freq1} and {word2}: {freq2}")
+            subwords1 = word1.split(" ")
+            subwords2 = word2.split(" ")
+            if "".join(subwords1) == "".join(subwords2):
+                different += freq1
+                total += freq1
+                if len(subwords2) > len(subwords1):
+                    more_subwords += freq1
+                    if len(subwords1) == 1:
+                        split_now += freq1
+                elif len(subwords2) < len(subwords1):
+                    less_subwords += freq1
+                    if len(subwords2) == 1:
+                        unsplit_now += freq1
+            else:
+                raise ValueError(f"Not matching dict entries: {word1}: {freq1} and {word2}: {freq2}")
 
-    return 1.0 - float(different) / total
+    return float(different) / total, \
+           float(more_subwords) / total, \
+           float(less_subwords) / total, \
+           float(split_now) / total, \
+           float(unsplit_now) / total

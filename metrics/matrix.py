@@ -69,7 +69,7 @@ def merge_similarity_rate_matrix(vocab_list: List[Dict[str, int]],
         own_encoded_vocab = bpe_encode.encode(vocab, merges_list[idx])
         for merges in merges_list:
             cross_encoded_vocab = bpe_encode.encode(vocab, merges)
-            row.append(merge_similarity_rate(cross_encoded_vocab.items(), own_encoded_vocab.items()))
+            row.append(merge_similarity_rate(own_encoded_vocab.items(), cross_encoded_vocab.items()))
         res.append(row)
     if path_to_save:
         output_matrix_to_csv(res, path_to_save)

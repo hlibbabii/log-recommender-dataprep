@@ -47,17 +47,18 @@ class MergeSimilarityRateMatrixTest(unittest.TestCase):
         merges_list = [[Merge(('a', 'b'), 1)]]
 
         actual = merge_similarity_rate_matrix(vocab_list, merges_list)
-        expected = [[1.0]]
+        expected = [[(0.0, 0.0, 0.0, 0.0, 0.0)]]
 
         self.assertEqual(expected, actual)
 
     def test_simple_pass(self):
-        vocab_list = [{"ab": 10, "cd": 30},
-                      {"ef": 70, "gh": 30}]
-        merges_list = [[Merge(('g', 'h'), 1)], [Merge(('a', 'b'), 1)]]
+        vocab_list = [{"abc": 10, "cd": 25, "gh": 5},
+                      {"ef": 70, "ghu": 30}]
+        merges_list = [[Merge(('a', 'b'), 1)], [Merge(('g', 'h'), 1), Merge(('b', 'c'), 2)]]
 
         actual = merge_similarity_rate_matrix(vocab_list, merges_list)
-        expected = [[1.0, 0.75], [0.7, 1.0]]
+        expected = [[(0.0, 0.0, 0.0, 0.0, 0.0), (0.375, 0.0, 0.125, 0.0, 0.125)],
+                    [(0.3, 0.3, 0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 0.0, 0.0)]]
 
         self.assertEqual(expected, actual)
 
