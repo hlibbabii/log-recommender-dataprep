@@ -44,7 +44,7 @@ class CooccurrenceMatrixTest(unittest.TestCase):
 class MergeSimilarityRateMatrixTest(unittest.TestCase):
     def test_trivial_pass(self):
         vocab_list = [{"ab": 10}]
-        merges_list = [{('a', 'b'): 1}]
+        merges_list = [[Merge(('a', 'b'), 1)]]
 
         actual = merge_similarity_rate_matrix(vocab_list, merges_list)
         expected = [[1.0]]
@@ -54,7 +54,7 @@ class MergeSimilarityRateMatrixTest(unittest.TestCase):
     def test_simple_pass(self):
         vocab_list = [{"ab": 10, "cd": 30},
                       {"ef": 70, "gh": 30}]
-        merges_list = [{('g', 'h'): 1}, {('a', 'b'): 1}]
+        merges_list = [[Merge(('g', 'h'), 1)], [Merge(('a', 'b'), 1)]]
 
         actual = merge_similarity_rate_matrix(vocab_list, merges_list)
         expected = [[1.0, 0.75], [0.7, 1.0]]
