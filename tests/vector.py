@@ -20,9 +20,10 @@ class MergeSimilarityRateTest(unittest.TestCase):
         merge_list2 = [("ab", 3), ("cd", 3), ("e f", 4)]
 
         actual = merge_similarity_rate(merge_list1, merge_list2)
-        expected = 0.6
+        expected = (0.4, 0.4, 0.0, 0.4, 0.0)
 
-        self.assertAlmostEqual(expected, actual, places=4)
+        for e,a in zip(expected, actual):
+            self.assertAlmostEqual(e, a, places=4)
 
     def test_different_entries(self):
         merge_list1 = [("ab", 3), ("cd", 3), ("ef", 4)]
