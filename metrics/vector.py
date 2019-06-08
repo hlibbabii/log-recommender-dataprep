@@ -1,12 +1,11 @@
 from collections import defaultdict, Counter
 from typing import List, Tuple, Dict
 
+from dataprep.split.merge import MergeList
 from scipy.stats.stats import pearsonr
 
-from metrics.merge import Merge
 
-
-def convert_to_vectors(merges1: List[Merge], merges2: List[Merge]) -> Tuple[List[int], List[int]]:
+def convert_to_vectors(merges1: MergeList, merges2: MergeList) -> Tuple[List[int], List[int]]:
     d = defaultdict(lambda:[0,0])
     for merge in merges1:
         d[merge.pair][0] = merge.freq
@@ -15,13 +14,13 @@ def convert_to_vectors(merges1: List[Merge], merges2: List[Merge]) -> Tuple[List
     return zip(*[(v[0], v[1]) for v in d.values()])
 
 
-def pearson(merges1: List[Merge], merges2: List[Merge]) -> float:
+def pearson(merges1: MergeList, merges2: MergeList) -> float:
     vector1, vector2 = convert_to_vectors(merges1, merges2)
     p = pearsonr(vector1, vector2)
     return p[0]
 
 
-def cooccurences(*merges_lists: List[Merge]) -> Counter:
+def cooccurences(*merges_lists: MergeList) -> Counter:
     c = Counter()
     for merges in merges_lists:
         c.update(list(map(lambda m: m.pair, merges)))

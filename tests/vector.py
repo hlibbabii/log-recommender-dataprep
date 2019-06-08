@@ -1,13 +1,14 @@
 import unittest
 
-from metrics.merge import Merge
+from dataprep.split.merge import MergeList, Merge
+
 from metrics.vector import convert_to_vectors, merge_similarity_rate
 
 
 class ConvertToVectorsTest(unittest.TestCase):
     def test_simple(self):
-        merges1 = [Merge(('a', 'b'), 2), Merge(('c', 'd'), 3)]
-        merges2 = [Merge(('a', 'b'), 7), Merge(('e', 'f'), 13)]
+        merges1 = MergeList().append(Merge(('a', 'b'), 2)).append(Merge(('c', 'd'), 3))
+        merges2 = MergeList().append(Merge(('a', 'b'), 7)).append(Merge(('e', 'f'), 13))
 
         actual = convert_to_vectors(merges1, merges2)
 

@@ -1,11 +1,11 @@
 import csv
 import os
-from typing import List, Optional, Tuple, Dict
+from typing import List, Optional, Dict
 
 from dataprep.split import bpe_encode
+from dataprep.split.merge import MergeList
 
 from metrics.vector import pearson, cooccurences, merge_similarity_rate
-from metrics.merge import Merge
 from joblib import Memory
 
 # needed for caching cell outputs
@@ -22,7 +22,7 @@ def output_matrix_to_csv(matrix: List[List], path_to_csv: str) -> None:
 
       
 @memory.cache
-def pearson_matrix(merge_lists: List[List[Merge]], path_to_save: Optional[str] = None) -> List[List[float]]:
+def pearson_matrix(merge_lists: List[MergeList], path_to_save: Optional[str] = None) -> List[List[float]]:
     res = []
     for merges1 in merge_lists:
         row = []
@@ -36,7 +36,7 @@ def pearson_matrix(merge_lists: List[List[Merge]], path_to_save: Optional[str] =
 
 
 @memory.cache
-def cooccurence_matrix(merges_list1: List[List[Merge]], merges_list2: List[List[Merge]], path_to_save: Optional[str] = None):
+def cooccurence_matrix(merges_list1: List[MergeList], merges_list2: List[MergeList], path_to_save: Optional[str] = None):
     res = []
     for merges1 in merges_list1:
         row = []
@@ -51,18 +51,10 @@ def cooccurence_matrix(merges_list1: List[List[Merge]], merges_list2: List[List[
     return res
 
 
-def to_dict_merge_format(merge_list: List[Merge]) -> Dict[Tuple[str, str], int]:
-    res = {}
-    for idx, merge in enumerate(merge_list):
-        res[merge.pair] = idx
-    return res
-
-
 @memory.cache
 def merge_similarity_rate_matrix(vocab_list: List[Dict[str, int]],
-                                 merges_list: List[List[Merge]],
+                                 merges_list: List[MergeList],
                                  path_to_save: Optional[str] = None):
-    merges_list = list(map(to_dict_merge_format, merges_list))
     res = []
     for idx, vocab in enumerate(vocab_list):
         row = []
