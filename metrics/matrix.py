@@ -2,8 +2,8 @@ import csv
 import os
 from typing import List, Optional, Dict
 
-from dataprep.split import bpe_encode
-from dataprep.split.merge import MergeList
+from dataprep.bpepkg import bpe_encode
+from dataprep.bpepkg.merge import MergeList
 
 from metrics.vector import pearson, cooccurences, merge_similarity_rate
 from joblib import Memory

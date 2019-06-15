@@ -1,6 +1,6 @@
 import unittest
 
-from dataprep.split.merge import Merge, MergeList
+from dataprep.bpepkg.merge import MergeList, Merge
 
 from metrics.matrix import cooccurence_matrix, merge_similarity_rate_matrix
 

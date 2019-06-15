@@ -1,6 +1,6 @@
 import unittest
 
-from dataprep.split.merge import MergeList, Merge
+from dataprep.bpepkg.merge import MergeList, Merge
 
 from metrics.vector import convert_to_vectors, merge_similarity_rate
 

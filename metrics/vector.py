@@ -1,7 +1,7 @@
 from collections import defaultdict, Counter
 from typing import List, Tuple, Dict
 
-from dataprep.split.merge import MergeList
+from dataprep.bpepkg.merge import MergeList
 from scipy.stats.stats import pearsonr
 
 
@@ -82,3 +82,18 @@ def merge_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str,
            float(less_subwords) / total, \
            float(split_now) / total, \
            float(unsplit_now) / total
+
+
+def vocab_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str, int]]) -> float:
+    set1 = set([word for word, _ in vocab1])
+    set2 = set([word for word, _ in vocab2])
+    n_entries_in_common = len(set1.intersection(set2))
+    return n_entries_in_common / len(set2) if set2 else 1.0
+
+
+def nonsense_rate(vocab: List[Tuple[str, int]]):
+    n_nonsense = 0
+    for word, _ in vocab:
+        if len(word) >= 6 and nonsense(word):
+            n_nonsense += 1
+    return n_nonsense / len(vocab) if vocab else 1.0
