@@ -3,6 +3,7 @@ from typing import List, Tuple, Dict
 
 from dataprep.bpepkg.merge import MergeList
 from scipy.stats.stats import pearsonr
+from nostril import nonsense
 
 
 def convert_to_vectors(merges1: MergeList, merges2: MergeList) -> Tuple[List[int], List[int]]:
