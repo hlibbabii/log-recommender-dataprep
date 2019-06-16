@@ -2,7 +2,8 @@ import unittest
 
 from dataprep.bpepkg.merge import MergeList, Merge
 
-from metrics.vector import convert_to_vectors, merge_similarity_rate, vocab_similarity_rate, nonsense_rate
+from metrics.vector import convert_to_vectors, merge_similarity_rate, vocab_similarity_rate, nonsense_rate, \
+    get_new_vocab
 
 
 class ConvertToVectorsTest(unittest.TestCase):
@@ -86,6 +87,14 @@ class NonsenseRateTest(unittest.TestCase):
     def test_simple(self):
         vocab1 = [('ahjsdksjkasnaKCmklsdc', 1), ('bullet', 2), ('hj', 3), ('hjk', 4)]
         self.assertEqual(0.25, nonsense_rate(vocab1))
+
+
+class GetNewVocabTest(unittest.TestCase):
+    def test_simple(self):
+        vocab1 = [('a', 2), ('b', 3)]
+        vocab2 = [('b', 7), ('c', 8)]
+
+        self.assertEqual([('c', 8)], get_new_vocab(vocab1, vocab2))
 
 
 if __name__ == '__main__':

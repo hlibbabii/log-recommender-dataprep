@@ -92,9 +92,21 @@ def vocab_similarity_rate(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str,
     return n_entries_in_common / len(set2) if set2 else 1.0
 
 
+def get_new_vocab(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str, int]]) -> List[Tuple[str, int]]:
+    set1 = set([word for word, _ in vocab1])
+    new_in_2 = []
+    for word, freq in vocab2:
+        if word not in set1:
+            new_in_2.append((word, freq))
+    return new_in_2
+
+
 def nonsense_rate(vocab: List[Tuple[str, int]]):
     n_nonsense = 0
     for word, _ in vocab:
-        if len(word) >= 6 and nonsense(word):
-            n_nonsense += 1
+        try:
+            if nonsense(word):
+                n_nonsense += 1
+        except ValueError:
+            pass
     return n_nonsense / len(vocab) if vocab else 1.0
