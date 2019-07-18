@@ -103,10 +103,27 @@ def get_new_vocab(vocab1: List[Tuple[str, int]], vocab2: List[Tuple[str, int]]) 
 
 def nonsense_rate(vocab: List[Tuple[str, int]]):
     n_nonsense = 0
+    n_total = 0
     for word, _ in vocab:
         try:
             if nonsense(word):
                 n_nonsense += 1
+            n_total +=1
         except ValueError:
             pass
-    return n_nonsense / len(vocab) if vocab else 1.0
+    return n_nonsense / n_total if n_total > 0 else 1.0
+
+
+def sense_nonsense(vocab: List[Tuple[str, int]]):
+    nsense = []
+    sense = []
+    for word, _ in vocab:
+        try:
+            if nonsense(word):
+                nsense.append(word)
+            else:
+                sense.append(word)
+        except ValueError:
+            pass
+    return sense, nsense
+
