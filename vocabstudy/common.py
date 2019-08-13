@@ -135,14 +135,14 @@ def get_corpus_size(vocab: Dict[str, int]) -> int:
     return sum(vocab.values())
 
 
-def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str], keywords: List[str]) -> None:
+def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str], keywords: List[str], extension: str) -> None:
     print(f"{description}\n")
 
     vocabs = []
     prep_corpora = []
     for dataset in datasets:
         dataset_path = os.path.join(PATH_TO_DATASETS, dataset)
-        prep_corpus = prep_function.apply(Corpus(dataset_path, 'java'), output_path=os.path.join(HOME, 'prep-datasets'))
+        prep_corpus = prep_function.apply(Corpus(dataset_path, extension), output_path=os.path.join(HOME, 'prep-datasets'))
         prep_corpora.append(prep_corpus)
         vocabs.append(prep_corpus.load_vocab())
     print(f'Removing prepped dataset at {prep_corpora[0].path_to_prep_dataset}')
