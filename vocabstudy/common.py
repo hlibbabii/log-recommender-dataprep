@@ -3,6 +3,8 @@ import os
 
 HOME = '/home/lv71161/hlibbabii'
 PATH_TO_DATASETS = os.path.join(HOME, 'raw_datasets')
+PATH_TO_PREP_DATASETS = os.path.join(HOME, 'prep-datasets')
+PATH_TO_PREP_DATASETS_TMP = '/tmp/scratch/prep-datasets'
 
 sys.path.append(os.path.join(HOME, 'projects/log-recommender-dataprep/'))
 
@@ -16,6 +18,9 @@ import logging
 import regex
 import pandas as pd
 import shutil
+import logging
+
+logger = logging.getLogger(__name__)
 
 IDENTIFIER_REGEX = "([[:lower:]]|[[:upper:]]|$|_)([[:lower:]]|[[:upper:]]|[0-9]|_|$)*"
 
@@ -142,11 +147,22 @@ def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str]
     prep_corpora = []
     for dataset in datasets:
         dataset_path = os.path.join(PATH_TO_DATASETS, dataset)
-        prep_corpus = prep_function.apply(Corpus(dataset_path, extension), output_path=os.path.join(HOME, 'prep-datasets'))
+        prep_corpus = prep_function.apply(Corpus(dataset_path, extension), output_path=PATH_TO_PREP_DATASETS_TMP)
         prep_corpora.append(prep_corpus)
         vocabs.append(prep_corpus.load_vocab())
-    print(f'Removing prepped dataset at {prep_corpora[0].path_to_prep_dataset}')
-    shutil.rmtree(prep_corpora[0].path_to_prep_dataset)
+    path_to_train_dataset = prep_corpora[0].path_to_prep_dataset
+    path_to_test_dataset = prep_corpora[1].path_to_prep_dataset
+    logger.debug(f'Checking if train dataset exists: {path_to_train_dataset}')
+    if os.path.exists(path_to_train_dataset):
+        logger.info(f'Train dataset is found and is going to be removed to save space: {path_to_train_dataset}. Removing ...')
+        shutil.rmtree(prep_corpora[0].path_to_prep_dataset)
+    if os.path.exists(path_to_test_dataset):
+        logger.info(f'Moving test dataset from tmp storage: {path_to_test_dataset} -> {PATH_TO_PREP_DATASETS}')
+        path_after_move = os.path.join(PATH_TO_PREP_DATASETS, os.path.basename(path_to_test_dataset))
+        if not os.path.exists(path_after_move):
+            shutil.move(path_to_test_dataset, PATH_TO_PREP_DATASETS)
+        else:
+            logger.warning(f'Not moving. Path already exists: {path_after_move}')
 
     train_vocab, test_vocab = tuple(vocabs)
     print("\n========================   Split example   =========================\n")
