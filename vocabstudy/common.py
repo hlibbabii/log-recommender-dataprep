@@ -1,3 +1,4 @@
+import csv
 import sys
 import os
 
@@ -5,6 +6,7 @@ HOME = '/home/lv71161/hlibbabii'
 PATH_TO_DATASETS = os.path.join(HOME, 'raw_datasets')
 PATH_TO_PREP_DATASETS = os.path.join(HOME, 'prep-datasets')
 PATH_TO_PREP_DATASETS_TMP = '/tmp/scratch/prep-datasets'
+VOCAB_STUDY_STATS_FILE = os.path.join(HOME, 'vocab-study-stats.csv')
 
 sys.path.append(os.path.join(HOME, 'projects/log-recommender-dataprep/'))
 
@@ -74,14 +76,36 @@ sample = '''void test_WordUeberraschungPrinter() {
 }'''
 
 
+HEADER = [
+    'Configuration', 'Train vocab', '% baseline', 'Train corpus size', '% baseline',
+    '% OOV', '% OOV @200K', '% OOV @100K', '% OOV @75K', '% OOV @50K', '% OOV @25K',
+    '% 1001 -', '% 101 - 1000', '% 11 - 100', '% 2-10', 'total', '% 1'
+]
+
+
+class VocabStatsCsvWriter():
+    def __init__(self, path, header: List[str]):
+        self.path = path
+        open(self.path, 'w').close() # rewriting the file
+        self.write_line(header)
+
+    def write_line(self, lst: List[str]) -> None:
+        with open(self.path, 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow(lst)
+
+
 def print_oov_stats(train_vocab, test_vocab):
     tops = [sys.maxsize, 200000, 100000, 75000, 50000, 25000]
+    csv_row = []
     for top in tops:
         test_tokens_number = sum(test_vocab.values())
         oov_in_test = get_new_vocab(list(train_vocab.items())[:top], list(test_vocab.items()))
         oov_tokens_number = sum(map(lambda e: e[1], oov_in_test))
         print(
             f"OOV in test set (top {top}): {len(oov_in_test)} ({100.0 * len(oov_in_test) / len(test_vocab):.2f}%), oov tokens number: {oov_tokens_number} ({100.0 * oov_tokens_number / test_tokens_number:.2f}%)")
+        csv_row.append(f'{100.0 * len(oov_in_test) / len(test_vocab):.2f}')
+    return csv_row
 
 
 def chunks(a, n):
@@ -140,8 +164,12 @@ def get_corpus_size(vocab: Dict[str, int]) -> int:
     return sum(vocab.values())
 
 
-def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str], keywords: List[str], extension: str) -> None:
+def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str],
+                           keywords: List[str], extension: str) -> List[str]:
+    csv_row = []
+
     print(f"{description}\n")
+    csv_row.append(description)
 
     vocabs = []
     prep_corpora = []
@@ -172,23 +200,35 @@ def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str]
 
     print("\n========================   Stats           =========================\n")
 
-    print(f"Train vocab: {len(train_vocab)}")
+    train_vocab_size = len(train_vocab)
+    print(f"Train vocab: {train_vocab_size}")
+    csv_row.append(str(train_vocab_size))
+    csv_row.append('')
     test_vocab_identifiers = without_non_identifiers(test_vocab, keywords)
 
     print(
         f"Test vocab : {len(test_vocab)}, identifiers: {len(test_vocab_identifiers)} ({len(test_vocab_identifiers) / len(test_vocab):.2f}%)\n")
 
-    print(f"Train corpus size: {get_corpus_size(train_vocab)}")
+    train_corpus_size = get_corpus_size(train_vocab)
+    print(f"Train corpus size: {train_corpus_size}")
+    csv_row.append(str(train_corpus_size))
+    csv_row.append('')
+
     test_tokens_number_ids = get_corpus_size(test_vocab_identifiers)
     test_tokens_number = get_corpus_size(test_vocab)
     print(
         f"Test corpus size : {test_tokens_number}, identifiers: {test_tokens_number_ids} ({test_tokens_number_ids / test_tokens_number:.2f}%)\n")
 
-    print_oov_stats(train_vocab, test_vocab)
+    csv_oov_stats = print_oov_stats(train_vocab, test_vocab)
+    csv_row.extend(csv_oov_stats)
     print("\nFor identifiers: \n")
     print_oov_stats(train_vocab, test_vocab_identifiers)
 
     # plot_percentiles(train_vocab)
     buckets = [1, 2, 11, 101, 1001]
     freqs = frequencies(train_vocab, buckets)
+    csv_row.extend(list(map(lambda f: f'{100.0 * f / train_vocab_size:.2f}', freqs)))
+    csv_row.append('')
+    csv_row.append('')
     print(freqs)
+    return csv_row
