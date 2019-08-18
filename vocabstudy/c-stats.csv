@@ -1,4 +1,4 @@
-Configuration,Train vocab,% baseline,Train corpus size,% baseline,% OOV,% OOV @200K,% OOV @100K,% OOV @75K,% OOV @50K,% OOV @25K,% 1001 -,% 101 - 1000,% 11 - 100,% 2-10,total,% 1
+Configuration,Train vocab,% baseline,Train corpus size,% baseline,% OOV,% OOV @200K,% OOV @100K,% OOV @75K,% OOV @50K,% OOV @25K,% 1001 -,% 101 - 1000,% 11 - 100,% 2-10,%1, total,% 1-10
 "unsplit, with comments and vocabulary. No filtering.",13221586,,3737950475,,17.70,82.62,87.82,89.71,91.98,95.00,21.40,53.36,21.46,3.35,0.43,,
 "Filtering  strings (+ comments, + whitespace, + non-ascii)",10876491,,2091010818,,18.75,85.08,89.56,91.10,93.03,95.56,17.75,56.51,21.97,3.40,0.37,,
 "An additional choice, the model from Hellendoorn and Devanbu: keep strings shorter than 15 char (check SLP-core code), remove others, remove comments",12177936,,2704596458,,19.11,85.49,89.88,91.40,93.30,95.74,21.23,54.79,20.54,3.10,0.34,,
