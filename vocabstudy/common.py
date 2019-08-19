@@ -79,11 +79,11 @@ sample = '''void test_WordUeberraschungPrinter() {
 HEADER = [
     'Configuration', 'Train vocab', '% baseline', 'Train corpus size', '% baseline',
     '% OOV', '% OOV @200K', '% OOV @100K', '% OOV @75K', '% OOV @50K', '% OOV @25K',
-    '% 1001 -', '% 101 - 1000', '% 11 - 100', '% 2-10', 'total', '% 1'
+    '% 1001 -', '% 101 - 1000', '% 11 - 100', '% 2-10', '%1' ,'total', '% 1-10'
 ]
 
 
-class VocabStatsCsvWriter():
+class VocabStatsCsvWriter(object):
     def __init__(self, path, header: List[str]):
         self.path = path
         open(self.path, 'w').close() # rewriting the file
