@@ -1,6 +1,9 @@
-Configuration,Train vocab,% baseline,Train corpus size,% baseline,% OOV,% OOV @200K,% OOV @100K,% OOV @75K,% OOV @50K,% OOV @25K,% 1001 -,% 101 - 1000,% 11 - 100,% 2-10,%1, total,% 1-10
+Configuration,Train vocab,% baseline,Train corpus size,% baseline,% OOV,% OOV @200K,% OOV @100K,% OOV @75K,% OOV @50K,% OOV @25K,% 1001 -,% 101 - 1000,% 11 - 100,% 2-10,%1,total,% 1-10
 "unsplit, with comments and vocabulary. No filtering.",13221586,,3737950475,,17.70,82.62,87.82,89.71,91.98,95.00,21.40,53.36,21.46,3.35,0.43,,
 "Filtering  strings (+ comments, + whitespace, + non-ascii)",10876491,,2091010818,,18.75,85.08,89.56,91.10,93.03,95.56,17.75,56.51,21.97,3.40,0.37,,
 "An additional choice, the model from Hellendoorn and Devanbu: keep strings shorter than 15 char (check SLP-core code), remove others, remove comments",12177936,,2704596458,,19.11,85.49,89.88,91.40,93.30,95.74,21.23,54.79,20.54,3.10,0.34,,
 "[Unsplit, remove non-ascii, remove whitespace, remove comments, remove strings longer than 15 chars] + Word splitting via conventions",3161429,,3385643033,,5.33,70.45,77.94,80.67,84.28,89.56,35.16,41.90,16.27,5.44,1.24,,
 "[Unsplit, remove non-ascii, remove whitespace, remove comments, remove strings longer than 15 chars] + split via conventions, but keep case. + Split numbers + Ronin",507372,,4460504358,,5.44,12.51,19.36,25.69,35.61,49.72,16.10,46.69,25.64,7.84,3.73,,
+bpe 2k Hellendoorn and Devanbu strings no comments no unicode,2372,,4233982066,,0.00,0.00,0.00,0.00,0.00,0.00,0.80,1.94,2.28,1.69,93.30,,
+bpe 5k Hellendoorn and Devanbu strings no comments no unicode ,5358,,3868044998,,0.00,0.00,0.00,0.00,0.00,0.00,0.35,0.88,1.08,0.90,96.79,,
+bpe 10k Hellendoorn and Devanbu strings no comments no unicode ,10338,,3626805509,,0.00,0.00,0.00,0.00,0.00,0.00,0.18,0.47,0.66,0.84,97.84,,

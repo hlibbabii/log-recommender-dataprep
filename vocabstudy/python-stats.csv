@@ -1,3 +1,9 @@
 Configuration,Train vocab,% baseline,Train corpus size,% baseline,% OOV,% OOV @200K,% OOV @100K,% OOV @75K,% OOV @50K,% OOV @25K,% 1001 -,% 101 - 1000,% 11 - 100,% 2-10,%1,total,% 1-10
 "unsplit, with comments and vocabulary. Filtering non-ascii.",15493134,,2863151236,,5.97,74.64,83.68,86.63,90.04,94.73,37.84,48.12,12.22,1.54,0.28,,
 "Filtering  comments ( + whitespace, + non-ascii)",15207571,,2037456204,,6.03,74.55,83.49,86.61,89.97,94.67,37.92,48.21,12.09,1.51,0.27,,
+"An additional choice, the model from Hellendoorn and Devanbu: keep strings shorter than 15 char (check SLP-core code), remove others, remove comments",14149544,,1535917448,,6.82,74.58,83.45,86.93,90.12,94.52,41.40,46.19,10.79,1.40,0.23,,
+"[Unsplit, remove non-ascii, remove whitespace, remove comments, remove strings longer than 15 chars] + Word splitting via conventions",5085302,,2350559745,,2.36,41.10,56.24,61.52,70.58,82.51,54.84,34.91,8.04,1.60,0.61,,
+"[Unsplit, remove non-ascii, remove whitespace, remove comments, remove strings longer than 15 chars] + split via conventions, but keep case. + Split numbers + Ronin",977202,,2807036704,,1.24,4.88,24.38,31.10,46.38,68.34,33.32,49.87,11.60,3.68,1.54,,
+bpe 2k Hellendoorn and Devanbu strings no comments no unicode ,2293,,3008636821,,0.00,0.00,0.00,0.00,0.00,0.00,1.09,0.39,1.35,0.44,96.73,,
+bpe 5k Hellendoorn and Devanbu strings no comments no unicode,5274,,2750132850,,0.00,0.00,0.00,0.00,0.00,0.00,0.47,0.19,0.66,0.72,97.95,,
+bpe 10k Hellendoorn and Devanbu strings no comments no unicode,10264,,2612459714,,0.00,0.00,0.00,0.00,0.00,0.00,0.24,0.14,0.51,1.03,98.08,,
