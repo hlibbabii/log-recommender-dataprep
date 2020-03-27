@@ -136,6 +136,14 @@ def frequencies(vocab: Dict[str, int], buckets: List[int]):
         counts[which_bucket(v, buckets)] += 1
     return counts
 
+from math import sqrt 
+
+def calc_variation_coeff(vocab: Dict[str, int]) -> float:
+    n = len(vocab)
+    mean = sum(vocab.values()) / float(n)
+    variation_koeff = sqrt(sum(list(map(lambda v: (v - mean) ** 2, vocab.values())))) / n / mean 
+    return variation_koeff
+    
 
 def plot_percentiles(vocab: Dict[str, int]) -> None:
     import plotly.graph_objects as go
@@ -221,8 +229,8 @@ def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str]
 
     csv_oov_stats = print_oov_stats(train_vocab, test_vocab)
     csv_row.extend(csv_oov_stats)
-    print("\nFor identifiers: \n")
-    print_oov_stats(train_vocab, test_vocab_identifiers)
+    #print("\nFor identifiers: \n")
+    #print_oov_stats(train_vocab, test_vocab_identifiers)
 
     # plot_percentiles(train_vocab)
     buckets = [1, 2, 11, 101, 1001]
@@ -230,5 +238,8 @@ def calc_and_display_stats(prep_function, description, datasets: Tuple[str, str]
     csv_row.extend(list(map(lambda f: f'{100.0 * f / train_vocab_size:.2f}', freqs)))
     csv_row.append('')
     csv_row.append('')
+    variation_coeff = calc_variation_coeff(train_vocab)
+    csv_row.append(variation_coeff)
+    print(f"Variation coeff: {variation_coeff}")
     print(freqs)
     return csv_row
