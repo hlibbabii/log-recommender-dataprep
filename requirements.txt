@@ -2,5 +2,5 @@
 git+git://github.com/giganticode/dataprep
 git+git://github.com/casics/spiral
 git+git://github.com/casics/nostril
-scipy==1.3.0
+scipy==1.10.0
 
